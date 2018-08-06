@@ -1,0 +1,727 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="ElasticSearch," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="ElasticSearch2.3.2十分钟上手 工作以来遇到很多次需要使用到ElasticSearch，主要用来做一些需要接近实时获取到查询结果的需求，或者是一些在mysql无法处理的复杂查询的非常大量级的数据，根据经验来说，mysql单表数据达到&amp;gt;5千万，想要在ms级查询出索引优化不是很好的数据，就比较难了。而ES是可以轻松做到的。当然这只是一个经验之谈。">
+<meta name="keywords" content="ElasticSearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElasticSearch2.3.2十分钟上手">
+<meta property="og:url" content="http://yaoboss.me/ElasticSearch/10-minutes-learn-ElasticSearch/index.html">
+<meta property="og:site_name" content="姚老板的黑店">
+<meta property="og:description" content="ElasticSearch2.3.2十分钟上手 工作以来遇到很多次需要使用到ElasticSearch，主要用来做一些需要接近实时获取到查询结果的需求，或者是一些在mysql无法处理的复杂查询的非常大量级的数据，根据经验来说，mysql单表数据达到&amp;gt;5千万，想要在ms级查询出索引优化不是很好的数据，就比较难了。而ES是可以轻松做到的。当然这只是一个经验之谈。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-22T03:57:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ElasticSearch2.3.2十分钟上手">
+<meta name="twitter:description" content="ElasticSearch2.3.2十分钟上手 工作以来遇到很多次需要使用到ElasticSearch，主要用来做一些需要接近实时获取到查询结果的需求，或者是一些在mysql无法处理的复杂查询的非常大量级的数据，根据经验来说，mysql单表数据达到&amp;gt;5千万，想要在ms级查询出索引优化不是很好的数据，就比较难了。而ES是可以轻松做到的。当然这只是一个经验之谈。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yaoboss.me/ElasticSearch/10-minutes-learn-ElasticSearch/"/>
+
+  <title> ElasticSearch2.3.2十分钟上手 | 姚老板的黑店 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?99a2d3229b0319d85883b13ed0467ba4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+    <div class="bottomband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">姚老板的黑店</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">记录一路走来的技术路上的总总</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ElasticSearch2.3.2十分钟上手
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-12-24T21:34:27+08:00" content="2016-12-24">
+              2016-12-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/ElasticSearch/" itemprop="url" rel="index">
+                    <span itemprop="name">ElasticSearch</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/ElasticSearch/10-minutes-learn-ElasticSearch/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="ElasticSearch/10-minutes-learn-ElasticSearch/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="ElasticSearch2-3-2十分钟上手"><a href="#ElasticSearch2-3-2十分钟上手" class="headerlink" title="ElasticSearch2.3.2十分钟上手"></a>ElasticSearch2.3.2十分钟上手</h1><blockquote>
+<p>工作以来遇到很多次需要使用到ElasticSearch，主要用来做一些需要接近实时获取到查询结果的需求，或者是一些在mysql无法处理的复杂查询的非常大量级的数据，根据经验来说，mysql单表数据达到&gt;5千万，想要在ms级查询出索引优化不是很好的数据，就比较难了。而ES是可以轻松做到的。当然这只是一个经验之谈。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="0x00"><a href="#0x00" class="headerlink" title="0x00"></a>0x00</h2><p>ES的文档写的真的很好，英文稍微还可以的人，都可以直接去看英文，不是很难理解。章节也分的好清晰，可以很容易找到。要说不好的地方，可能也就是从官网找的话，页面目录层级比较深，有时候会不太好找。我这里写的内容，主要是作为我自己多次间隔很长时间，重新使用ES的一个快速回忆记录。这个十分钟可以快速帮助你，也帮助我自己找回ES的最基础概念和使用的记忆。说实话我的记性真的是不怎么好。</p>
+<p>当然你没接触过ES，也是没有问题的，这篇文章可以从安装到使用，一步一步教你上手。</p>
+<p>我个人是使用<code>JAVA语言</code>做开发的，ES也支持各种客户端API，但是这篇文章我都使用<code>JAVA</code>和标准<code>HTTP RESTFUL</code>做例子。</p>
+<h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><p>elassticsearch包含好多产品，和spring一样，下面这个是elasticsearch的链接</p>
+<p>官网：<a href="https://www.elastic.co/products/elasticsearch" target="_blank" rel="noopener">https://www.elastic.co/products/elasticsearch</a></p>
+<p>下载地址：<a href="https://www.elastic.co/downloads/elasticsearch" target="_blank" rel="noopener">https://www.elastic.co/downloads/elasticsearch</a></p>
+<p>windows下选择zip包，linux就tar包</p>
+<p>其实文件都是一样的，都包含<code>bat</code>也包含<code>sh</code>脚本</p>
+<p>只不过tar包在linux下解压比较方便</p>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>ES就像<code>mysql</code>一样，也类似一个数据库服务，我们要使用需要先启动</p>
+<p>在bin目录下，<code>elasticsearch.bat</code>使用这个脚本启动</p>
+<p>linux是<code>elasticsearch</code></p>
+<p>这样会以默认的端口启动，<code>http</code>访问端口是9200，<code>socket</code>访问端口是9300</p>
+<p>测试是否启动成功：</p>
+<p><code>http://127.0.0.1:9200/</code></p>
+<p>成功启动，可以看到下面这些信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;DEV_10_16_6_18&quot;,</span><br><span class="line">  &quot;cluster_name&quot; : &quot;elk_dev&quot;,</span><br><span class="line">  &quot;version&quot; : &#123;</span><br><span class="line">    &quot;number&quot; : &quot;2.3.2&quot;,</span><br><span class="line">    &quot;build_hash&quot; : &quot;b9e4a6acad4008027e4038f6abed7f7dba346f94&quot;,</span><br><span class="line">    &quot;build_timestamp&quot; : &quot;2016-04-21T16:03:47Z&quot;,</span><br><span class="line">    &quot;build_snapshot&quot; : false,</span><br><span class="line">    &quot;lucene_version&quot; : &quot;5.5.0&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;tagline&quot; : &quot;You Know, for Search&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="端口问题"><a href="#端口问题" class="headerlink" title="端口问题"></a>端口问题</h2><p>ES会对外提供两个端口的服务：HTTP端口，socket端口</p>
+<p>HTTP端口可以在配置文件中使用</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>启动成功了，我们还需要知道一些基础概念</p>
+<p><strong>index</strong>:<code>索引</code>，ES的顶级存储单位，我们所有的数据都必须存储到一个index中，如果熟悉mysql，我们可以认为index就是mysql中的一个<code>database</code>，我们要使用mysql，我们先要建一个库，ES里是先要建一个index</p>
+<p><strong>type</strong>:<code>类型</code>，索引下的存储单位，一个index下可以存在任意多的type，对应mysql中，就想一个database下的表，但是这个表结构并不是固定的，比如都叫<code>book</code>的type不一定都要有<code>name</code>这个字段。但是为了不反人类，最好不要这么设计，还是统一type的结构会比较好</p>
+<p><strong>shard</strong>:<code>分片</code>，ES是个分布式的引擎，数据是分片存储的，每个index都分片存储在不同的shard下面，默认启动是5个shard</p>
+<p><strong>replica</strong>：<code>拷贝</code>，为了保证系统的可用性，ES的每个shard还有一个replica，相当于每份数据都有一份备份</p>
+<p><strong>http restful API</strong>:ES提供的基于HTTP协议的，restful风格的API，可用直接在浏览器调用（但是浏览器只支持get请求，其他post,put需要使用插件），或者也可以在linux上使用<code>curl</code>访问，非常方便</p>
+<p><strong>JAVA API</strong>：ES就是使用JAVA开发的，所以和JAVA集成是最方便的，提供了非常完善的JAVA API以进行各种查询，聚合调用，如果你的项目使用JAVA的话，那就可以直接使用JAVA API直接访问ES服务，它和使用HTTP访问的区别，主要是基于协议不太一样，JAVA API直接建立一个socket连接到某个节点上，建立一个<code>transport</code>进行访问数据</p>
+<h2 id="基本操作-CRUD-增删改查"><a href="#基本操作-CRUD-增删改查" class="headerlink" title="基本操作 CRUD 增删改查"></a>基本操作 CRUD 增删改查</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 增或改</span><br><span class="line"></span><br><span class="line">curl -XPUT &apos;http://127.0.0.1:9200/twitter/tweet/1&apos; -d &apos;</span><br><span class="line">&#123;</span><br><span class="line">    &quot;user&quot;: &quot;kimchy&quot;,</span><br><span class="line">    &quot;postDate&quot;: &quot;2009-11-15T13:12:00&quot;,</span><br><span class="line">    &quot;message&quot;: &quot;Trying out Elasticsearch, so far so good?&quot;</span><br><span class="line">&#125;&apos;</span><br><span class="line"></span><br><span class="line">// 查</span><br><span class="line">curl -XGET &apos;http://127.0.0.1:9200/twitter/tweet/1?pretty=true&apos;</span><br><span class="line"></span><br><span class="line">// 删</span><br><span class="line">curl -XDELETE &apos;http://127.0.0.1:9200/twitter/tweet/1?pretty=true&apos;</span><br></pre></td></tr></table></figure>
+<h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//获取用户名为kimchy的tweet</span><br><span class="line">curl -XGET &apos;http://127.0.0.1:9200/twitter/tweet/_search?q=user:kimchy&amp;pretty=true&apos;</span><br><span class="line"></span><br><span class="line">//获取twitter/tweet下面的所有数据，默认只会显示前十条，或者前5条</span><br><span class="line">curl -XGET &apos;http://127.0.0.1:9200/twitter/tweet/_search?pretty=true&apos;</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<p>ES的搜索，最大只能搜索前2W条数据，如果需要搜索2W条以后的数据，需要使用到scroll</p>
+<p>也就是说，在ES里面，2W条以内可以使用from,size来分页查询，但是超出2W条就不行了，而且是from+size&lt;=2W,超出就会报错，在我另一篇文章里有说明</p>
+<h2 id="彩蛋"><a href="#彩蛋" class="headerlink" title="彩蛋"></a>彩蛋</h2><p>最后介绍一个神器，写ES的查询语句，复杂的话是很蛋疼的，需要花比较多时间，还不一定能写对，但是大家对<code>sql语句</code>一定都很数据，那下面就有一个工具，可以把<code>sql语句</code>转换成对于的ES查询语句，爽飞！！</p>
+<p>名字叫：<strong>Elasticsearch-sql</strong></p>
+<p>地址：<a href="https://github.com/NLPchina/elasticsearch-sql" target="_blank" rel="noopener">https://github.com/NLPchina/elasticsearch-sql</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ElasticSearch/" rel="tag">#ElasticSearch</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/java/modify-class-file-in-the-jar-of-java/" rel="next" title="破解jar包直接修改class文件的方式">
+                <i class="fa fa-chevron-left"></i> 破解jar包直接修改class文件的方式
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ElasticSearch/ElasticSearch2-3-2-exception-NoNodeAvailableException/" rel="prev" title="ElasticSearch2.3.2报错NoNodeAvailableException">
+                ElasticSearch2.3.2报错NoNodeAvailableException <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="ElasticSearch/10-minutes-learn-ElasticSearch/"
+           data-title="ElasticSearch2.3.2十分钟上手" data-url="http://yaoboss.me/ElasticSearch/10-minutes-learn-ElasticSearch/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/dogeAndFish.jpg"
+               alt="Yao" />
+          <p class="site-author-name" itemprop="name">Yao</p>
+          <p class="site-description motion-element" itemprop="description">关注jvm,java,go,as3,node,web全栈,高可用 高并发架构,直播行业</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/hero82748274" target="_blank" rel="external nofollow" title="夏天的树人的专栏">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  夏天的树人的专栏
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.chenside.cn" target="_blank" rel="external nofollow" title="思德的博客">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  思德的博客
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ElasticSearch2-3-2十分钟上手"><span class="nav-number">1.</span> <span class="nav-text">ElasticSearch2.3.2十分钟上手</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00"><span class="nav-number">1.1.</span> <span class="nav-text">0x00</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载安装"><span class="nav-number">1.2.</span> <span class="nav-text">下载安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动"><span class="nav-number">1.3.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#端口问题"><span class="nav-number">1.4.</span> <span class="nav-text">端口问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.5.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本操作-CRUD-增删改查"><span class="nav-number">1.6.</span> <span class="nav-text">基本操作 CRUD 增删改查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索"><span class="nav-number">1.7.</span> <span class="nav-text">搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#彩蛋"><span class="nav-number">1.8.</span> <span class="nav-text">彩蛋</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yao</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io" rel="external nofollow">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"yaoboss"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>

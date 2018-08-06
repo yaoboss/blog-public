@@ -1,0 +1,721 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="web技术," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="在我来到酷狗之前，一直做游戏开发。虽然是做页游，也一样是在浏览器访问，但是和传统的做web开发，还是有着很大的区别。导致我一开始的时候，在做酷狗LIVE项目时和前端配合的不是很好，当时还让前端来给我解释为什么要使用JSONP，因为那时我还第一次听到这个名词。哈哈。  那么，到底什么是JSONP呢？">
+<meta name="keywords" content="web技术">
+<meta property="og:type" content="article">
+<meta property="og:title" content="什么是JSONP？关于前端的跨域问题">
+<meta property="og:url" content="http://yaoboss.me/web技术/what-is-jsonp/index.html">
+<meta property="og:site_name" content="姚老板的黑店">
+<meta property="og:description" content="在我来到酷狗之前，一直做游戏开发。虽然是做页游，也一样是在浏览器访问，但是和传统的做web开发，还是有着很大的区别。导致我一开始的时候，在做酷狗LIVE项目时和前端配合的不是很好，当时还让前端来给我解释为什么要使用JSONP，因为那时我还第一次听到这个名词。哈哈。  那么，到底什么是JSONP呢？">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-22T03:57:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="什么是JSONP？关于前端的跨域问题">
+<meta name="twitter:description" content="在我来到酷狗之前，一直做游戏开发。虽然是做页游，也一样是在浏览器访问，但是和传统的做web开发，还是有着很大的区别。导致我一开始的时候，在做酷狗LIVE项目时和前端配合的不是很好，当时还让前端来给我解释为什么要使用JSONP，因为那时我还第一次听到这个名词。哈哈。  那么，到底什么是JSONP呢？">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yaoboss.me/web技术/what-is-jsonp/"/>
+
+  <title> 什么是JSONP？关于前端的跨域问题 | 姚老板的黑店 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?99a2d3229b0319d85883b13ed0467ba4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+    <div class="bottomband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">姚老板的黑店</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">记录一路走来的技术路上的总总</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                什么是JSONP？关于前端的跨域问题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-19T00:28:29+08:00" content="2016-10-19">
+              2016-10-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/web技术/" itemprop="url" rel="index">
+                    <span itemprop="name">web技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/web技术/what-is-jsonp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="web技术/what-is-jsonp/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>在我来到酷狗之前，一直做游戏开发。虽然是做页游，也一样是在浏览器访问，但是和传统的做web开发，还是有着很大的区别。导致我一开始的时候，在做酷狗LIVE项目时和前端配合的不是很好，当时还让前端来给我解释为什么要使用JSONP，因为那时我还第一次听到这个名词。哈哈。</p>
+</blockquote>
+<p>那么，到底什么是JSONP呢？</p>
+<a id="more"></a>
+<h1 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h1><p>抛开不解释跨域问题的讨论<code>JSONP</code>，都是耍流氓。</p>
+<p>凭胸而论，啊呸，平心而论，一开始我真的没理解为什么需要JSONP。JSONP是什么，很容易理解，但是为什么要用这种方式，我真的花了点时间才搞懂。原因就是网上大多文章就一句带过，解决跨域问题，但是没有很好的解释什么是跨域问题。像我这种对前端并不是特别擅长的人，就容易产生疑惑。</p>
+<p>什么是跨域？最简单的解释：</p>
+<blockquote>
+<p>我们部署网站都会有个域名去访问，比如 <a href="http://www.yaoboss.me，访问我的博客，这是我的网站的域名，也就是我的网站的域，当我在我网站域下面的页面中，要通过ajax请求去google的某个接口下面获取数据，那我访问的接口一定是http://www.google.com/xxxx/inteface/getXXX，那么谷歌接口所在的域就是，www.google.com，这样就是跨域了" target="_blank" rel="noopener">www.yaoboss.me，访问我的博客，这是我的网站的域名，也就是我的网站的域，当我在我网站域下面的页面中，要通过ajax请求去google的某个接口下面获取数据，那我访问的接口一定是http://www.google.com/xxxx/inteface/getXXX，那么谷歌接口所在的域就是，www.google.com，这样就是跨域了</a></p>
+</blockquote>
+<p>最早的网景公司定的浏览器规范规定了一个<code>同源策略</code>的安全协议，这个安全协议规定，一个网页中除了特殊的某些标签，<code>&lt;script&gt;,&lt;img&gt;</code>等，可以访问跨域的资源，其他的请求禁止访问跨域的资源。也就是说像我们上面那样，使用原生的<code>AJAX</code>去请求谷歌接口的数据，是获取不到数据的，JS会报错的。我们在浏览器的<code>console</code>里面，可能会看到这样的错误，<code>MLHttpRequest cannot load https://www.google.com/. No &#39;Access-Control-Allow-Origin&#39; header is present on the requested resource. Origin &#39;null&#39; is therefore not allowed access.</code></p>
+<p>跨域的请求是一种合理的需求，我们无法避免的。在工作中，我们公司可能会有很多的域名，每个部门有自己的域名，业务线有业务线的域名。当需要互相调用时，就会有跨域问题。所以这时候就出现了<code>JSONP</code>,可以说是以一种<code>trick</code>的方式解决了跨域问题。那我们接下来就看看<code>JSONP</code>到底是什么。</p>
+<h1 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h1><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">callbackFunction(["customername1","customername2"])</span><br></pre></td></tr></table></figure>
+<p>上面代码段里面就是<code>JSONP</code>格式，你看他像什么？不就是一个JS方法调用么！传递了一个数组参数！</p>
+<p>没错，就是JS方法调用。这就是JSONP。我们就这样理解，就够了。至于什么<code>json padding</code>，不用管。术语而已，咱们就来实在的大实话。</p>
+<p>上面就是JSONP的真容。</p>
+<p>接下来我们说怎么用。</p>
+<p>前面有提到，<code>&lt;script&gt;&lt;/script&gt;</code>标签不受跨域限制，里面的<code>src</code>属性，可以从任何地方加载js文件。这个地方就可以做文章了，其实这个标签本质上就是对目标发起一个<code>GET</code>请求，将返回值作为一段脚本代码，作用于当前域。</p>
+<p>那我们完全可以在服务端做一个服务，返回一段拼装的JS代码，这样<code>script</code>标签获取到了，就当做JS代码执行了。</p>
+<p>思路走到这里，我们就可以想到，像上面那样，返回一个拼装的<code>回调JS代码</code>，我们在当前域再定义一个同名函数，那这样就和一个AJAX请求一样了。请求成功就回调本地一个函数方法，并在参数里面传入请求成功的返回值。这样，就是一个<code>JSONP</code>了，也就解决了跨域问题。</p>
+<p>下面是一个最简单的演示demo，借鉴了菜鸟教程的例子：</p>
+<p>test.html</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">&lt;title&gt;JSONP 实例&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id=&quot;divCustomers&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">		function callbackFunction(result, methodName)</span><br><span class="line">        &#123;</span><br><span class="line">            var html = &apos;&lt;ul&gt;&apos;;</span><br><span class="line">            for(var i = 0; i &lt; result.length; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                html += &apos;&lt;li&gt;&apos; + result[i] + &apos;&lt;/li&gt;&apos;;</span><br><span class="line">            &#125;</span><br><span class="line">            html += &apos;&lt;/ul&gt;&apos;;</span><br><span class="line">            document.getElementById(&apos;divCustomers&apos;).innerHTML = html;</span><br><span class="line">        &#125;</span><br><span class="line">	&lt;/script&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;http://www.runoob.com/try/ajax/jsonp.php?jsoncallback=callbackFunction&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src=&quot;//cdn.bootcss.com/jquery/3.1.1/jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">    </span><br><span class="line">	//直接ajax请求google网站，如果你部署在google.com域之外，就会报错</span><br><span class="line">	$.get(&quot;http://www.google.com/&quot;);</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>jsonp.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">header(&apos;Content-type: application/json&apos;);</span><br><span class="line">//获取回调函数名</span><br><span class="line">$jsoncallback = htmlspecialchars($_REQUEST [&apos;jsoncallback&apos;]);</span><br><span class="line">//json数据</span><br><span class="line">$json_data = &apos;[&quot;customername1&quot;,&quot;customername2&quot;]&apos;;</span><br><span class="line">//输出jsonp格式的数据</span><br><span class="line">echo $jsoncallback . &quot;(&quot; . $json_data . &quot;)&quot;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>这个实验，你可以在本地分两个服务器部署，然后从一台调用另外一台。也可以在<code>hosts</code>里面配域名，模仿更真实的跨域场景。</p>
+<p>或者最简单，就部署上面的test.html，看看效果，然后分析下，基本就可以明白<code>JSONP</code>了。</p>
+<h1 id="更好的使用JSONP"><a href="#更好的使用JSONP" class="headerlink" title="更好的使用JSONP"></a>更好的使用JSONP</h1><p>我们当然不愿意每一个请求都去写一个<code>script</code>标签，好在我们有<code>jquery</code></p>
+<p>我们使用<code>jquery</code>来调用<code>JSONP</code>请求将变得很简单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;JSONP 实例&lt;/title&gt;</span><br><span class="line">    &lt;script src=&quot;http://cdn.static.runoob.com/libs/jquery/1.8.3/jquery.js&quot;&gt;&lt;/script&gt;    </span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div id=&quot;divCustomers&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line"></span><br><span class="line">	//就是getJSON方法,更详细的用法请参考API吧</span><br><span class="line">	$.getJSON(&quot;http://www.runoob.com/try/ajax/jsonp.php?jsoncallback=?&quot;, function(data) &#123;</span><br><span class="line">	    </span><br><span class="line">	    var html = &apos;&lt;ul&gt;&apos;;</span><br><span class="line">	    for(var i = 0; i &lt; data.length; i++)</span><br><span class="line">	    &#123;</span><br><span class="line">	        html += &apos;&lt;li&gt;&apos; + data[i] + &apos;&lt;/li&gt;&apos;;</span><br><span class="line">	    &#125;</span><br><span class="line">	    html += &apos;&lt;/ul&gt;&apos;;</span><br><span class="line">	    </span><br><span class="line">	    $(&apos;#divCustomers&apos;).html(html); </span><br><span class="line">	&#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="不只是JSONP"><a href="#不只是JSONP" class="headerlink" title="不只是JSONP"></a>不只是JSONP</h1><p>跨域的方式还有很多种，这里我们只说了JSONP这一种，最近好像还看到一种W3C支持的一种跨域方案，不过还没仔细去看，大家可以自己去搜搜</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web技术/" rel="tag">#web技术</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/java/thinkings-from-crab/" rel="next" title="由一只大闸蟹想到的基于tesseract-ocr的验证码识别">
+                <i class="fa fa-chevron-left"></i> 由一只大闸蟹想到的基于tesseract-ocr的验证码识别
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/php/how-to-setup-PHP-and-NGINX/" rel="prev" title="配置安装PHP开发环境，使用NGINX和PHP-FPM">
+                配置安装PHP开发环境，使用NGINX和PHP-FPM <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="web技术/what-is-jsonp/"
+           data-title="什么是JSONP？关于前端的跨域问题" data-url="http://yaoboss.me/web技术/what-is-jsonp/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/dogeAndFish.jpg"
+               alt="Yao" />
+          <p class="site-author-name" itemprop="name">Yao</p>
+          <p class="site-description motion-element" itemprop="description">关注jvm,java,go,as3,node,web全栈,高可用 高并发架构,直播行业</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/hero82748274" target="_blank" rel="external nofollow" title="夏天的树人的专栏">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  夏天的树人的专栏
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.chenside.cn" target="_blank" rel="external nofollow" title="思德的博客">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  思德的博客
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#跨域"><span class="nav-number">1.</span> <span class="nav-text">跨域</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JSONP"><span class="nav-number">2.</span> <span class="nav-text">JSONP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#更好的使用JSONP"><span class="nav-number">3.</span> <span class="nav-text">更好的使用JSONP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不只是JSONP"><span class="nav-number">4.</span> <span class="nav-text">不只是JSONP</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yao</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io" rel="external nofollow">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"yaoboss"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>

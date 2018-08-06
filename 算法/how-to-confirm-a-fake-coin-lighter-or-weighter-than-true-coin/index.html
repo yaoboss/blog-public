@@ -1,0 +1,716 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="算法," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="更轻或者更重？ 你有n&amp;gt;2个外观相似的硬币和一个没有砝码的天平。其中一枚为假币，但并不知道它比真币重还是轻。设计一个 θ(1)的算法来确定假币比真币重还是轻。">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="判断假币比真币重还是轻？">
+<meta property="og:url" content="http://yaoboss.me/算法/how-to-confirm-a-fake-coin-lighter-or-weighter-than-true-coin/index.html">
+<meta property="og:site_name" content="姚老板的黑店">
+<meta property="og:description" content="更轻或者更重？ 你有n&amp;gt;2个外观相似的硬币和一个没有砝码的天平。其中一枚为假币，但并不知道它比真币重还是轻。设计一个 θ(1)的算法来确定假币比真币重还是轻。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-22T03:57:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="判断假币比真币重还是轻？">
+<meta name="twitter:description" content="更轻或者更重？ 你有n&amp;gt;2个外观相似的硬币和一个没有砝码的天平。其中一枚为假币，但并不知道它比真币重还是轻。设计一个 θ(1)的算法来确定假币比真币重还是轻。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yaoboss.me/算法/how-to-confirm-a-fake-coin-lighter-or-weighter-than-true-coin/"/>
+
+  <title> 判断假币比真币重还是轻？ | 姚老板的黑店 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?99a2d3229b0319d85883b13ed0467ba4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+    <div class="bottomband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">姚老板的黑店</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">记录一路走来的技术路上的总总</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                判断假币比真币重还是轻？
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-27T16:11:46+08:00" content="2016-08-27">
+              2016-08-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/算法/how-to-confirm-a-fake-coin-lighter-or-weighter-than-true-coin/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="算法/how-to-confirm-a-fake-coin-lighter-or-weighter-than-true-coin/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="更轻或者更重？"><a href="#更轻或者更重？" class="headerlink" title="更轻或者更重？"></a>更轻或者更重？</h2><blockquote>
+<p>你有n&gt;2个外观相似的硬币和一个没有砝码的天平。其中一枚为假币，但并不知道它比真币重还是轻。设计一个 θ(1)的算法来确定假币比真币重还是轻。</p>
+</blockquote>
+<a id="more"></a>
+<p>看《算法设计与分析基础》，习题2.2里面的一道题，还挺有意思的。</p>
+<p>问题第一眼看上去并不算难，很快就能想出一些解法。</p>
+<h2 id="第一种解法"><a href="#第一种解法" class="headerlink" title="第一种解法"></a>第一种解法</h2><p>直观上，既然只有一枚假币，那其他都是真币，那其他真币，随便拿两个放在天平上，肯定天平是平衡的。如果不平衡，那里面一定有一个是假币。</p>
+<p>根据上面的想法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">随意从n&gt;2中取出两枚硬币，分别为y1,y2</span><br><span class="line"></span><br><span class="line">if y1=y2 </span><br><span class="line">	//y1和y2相等，那么y1，y2都是真币</span><br><span class="line">	while(true) &#123;</span><br><span class="line">		//再从所有硬币中取出一枚硬币y3</span><br><span class="line">		if y1=y3</span><br><span class="line">			continue</span><br><span class="line">		else if y1&gt;y2</span><br><span class="line">			//假币更轻</span><br><span class="line">			break</span><br><span class="line">		else</span><br><span class="line">			//假币更重</span><br><span class="line">			break</span><br><span class="line">	&#125;</span><br><span class="line">else </span><br><span class="line">	//再从所有硬币中取出一枚硬币y3</span><br><span class="line">	if y1=y3</span><br><span class="line">		//y2就是假币</span><br><span class="line">	if y1!=y3</span><br><span class="line">		//y1就是假币</span><br></pre></td></tr></table></figure>
+<p>第一种解法，显然是一个<code>O(n)</code>时间复杂度的算法，最差情况下，比较到最后一个硬币才能发现假币。当然，最好情况，可以只需要两次。不过依然是一个<code>O(n)</code>时间复杂度的算法，并不符合题目的要求。</p>
+<p>不过，这是一种直观的解法，研究一个算法，就普通人来说，没法做到像大牛一般，一下就能想到很合适，很优雅的算法。可能就是从最粗暴的<code>暴力硬撸</code>算法开始，不过在这思考中间，有可能就能想到更好的思路。我一开始学习算法，做算法题时，就很有挫败感，感觉看别人的答案，都是很精妙的解法，甚至连代码都写的很<code>优雅</code>，都是<code>十行java搞定xxx</code>，<code>一行python解决xxx</code>，不过这背后付出了多少努力，我们是看不见的。记得在 <a href="https://movie.douban.com/subject/1291546/" target="_blank" rel="noopener">霸王别姬</a>里面有一幕，小赖子看到唱京戏的名角儿，底下人声鼎沸，叫好声一片，小豆子抹着眼泪大哭：“我什么时候能成角儿啊？这得挨多少打呀？”</p>
+<p>写远了。</p>
+<h2 id="第二种解法"><a href="#第二种解法" class="headerlink" title="第二种解法"></a>第二种解法</h2><p>要想做到<code>θ(1)</code>的时间复杂度，那必须在固定步骤中就能解出结果，那就必然不能在某一个硬币上面纠结，如果一个一个去比较，那必定是要到<code>O(n)</code>的。既然不能一个一个，那就一堆一堆咯？这是我当时最直观的想法。一堆一堆怎么比较？</p>
+<h3 id="分成两堆"><a href="#分成两堆" class="headerlink" title="分成两堆"></a>分成两堆</h3><p>如果<code>n%2=0</code>，把n分成两等份，必然一堆重，一堆轻，然而好像没什么卵用，没法确认假币轻还是重，因为我们不知道假币在哪堆。</p>
+<p>灵感来了，我们要怎么知道假币在哪堆呢？</p>
+<h3 id="分成三堆"><a href="#分成三堆" class="headerlink" title="分成三堆"></a>分成三堆</h3><p>分成三堆，假币一定会在其中一堆里面，那其他两堆都是真币，两堆同样数量的真币重量也一定相等！确定了两堆真币，和一堆含有一个假币的，这样就变的很简单了！两堆真币拿出和假币堆一样数量的真币，和假币堆一比较，轻重的结果就出来了！</p>
+<p>关键点：</p>
+<ul>
+<li>分成三堆，其中两堆加起来一定要<strong>大于或者等于</strong>余下的那一堆，否则最后没法做比较</li>
+<li>三堆加起来等于全部的硬币数量，不要剩余什么零头，否则就多了可能性，自然算法的步骤就增多了</li>
+</ul>
+<p>那三堆到底可以分成多大？其实根据上面两个关键点已经可以推出来了</p>
+<p>$$ f(n)= \begin{cases} 2x+y=n \newline 2x&gt;=y \end{cases} $$</p>
+<p>由于 <strong>n</strong> 是已经确定的，其实就是解一个2元一次方程，求出<strong>x</strong>,<strong>y</strong>的范围，也就知道怎么分配堆的大小了</p>
+<p>数学真奇妙o(￣▽￣)d</p>
+<p>今天这道题就写这么多啦~</p>
+<p>白了个白~</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag">#算法</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/开发工具/add-right-click-support-of-sublime-in-windows/" rel="next" title="将Sublime Text3添加到右键菜单中">
+                <i class="fa fa-chevron-left"></i> 将Sublime Text3添加到右键菜单中
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/算法/why-does-0-equal-1/" rel="prev" title="0的阶乘为什么等于1呢？">
+                0的阶乘为什么等于1呢？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="算法/how-to-confirm-a-fake-coin-lighter-or-weighter-than-true-coin/"
+           data-title="判断假币比真币重还是轻？" data-url="http://yaoboss.me/算法/how-to-confirm-a-fake-coin-lighter-or-weighter-than-true-coin/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/dogeAndFish.jpg"
+               alt="Yao" />
+          <p class="site-author-name" itemprop="name">Yao</p>
+          <p class="site-description motion-element" itemprop="description">关注jvm,java,go,as3,node,web全栈,高可用 高并发架构,直播行业</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/hero82748274" target="_blank" rel="external nofollow" title="夏天的树人的专栏">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  夏天的树人的专栏
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.chenside.cn" target="_blank" rel="external nofollow" title="思德的博客">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  思德的博客
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#更轻或者更重？"><span class="nav-number">1.</span> <span class="nav-text">更轻或者更重？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一种解法"><span class="nav-number">2.</span> <span class="nav-text">第一种解法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二种解法"><span class="nav-number">3.</span> <span class="nav-text">第二种解法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分成两堆"><span class="nav-number">3.1.</span> <span class="nav-text">分成两堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分成三堆"><span class="nav-number">3.2.</span> <span class="nav-text">分成三堆</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yao</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io" rel="external nofollow">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"yaoboss"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>

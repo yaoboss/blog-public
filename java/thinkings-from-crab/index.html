@@ -1,0 +1,807 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,tesseract,机器学习," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本来今年没打算吃大闸蟹，也就没买，说实话也不是特别好这口，剥起来还麻烦。碰巧朋友公司发了券，可以兑换八只，她有两张，也吃不完，遂要来一张。万万没想到，我几年最后还是吃上了大闸蟹。进入正题，朋友公司发的是礼品卡，兑换券，有一个卡号，和一个密码，到指定的网站上用这卡号和密码登录之后即可兑换，用快递发货。流程就是如此。拍照发我之后，卡号只有5位，密码是6位，我顿感兴奋，这可能性不多啊，密码只有6位，0">
+<meta name="keywords" content="java,tesseract,机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="由一只大闸蟹想到的基于tesseract-ocr的验证码识别">
+<meta property="og:url" content="http://yaoboss.me/java/thinkings-from-crab/index.html">
+<meta property="og:site_name" content="姚老板的黑店">
+<meta property="og:description" content="本来今年没打算吃大闸蟹，也就没买，说实话也不是特别好这口，剥起来还麻烦。碰巧朋友公司发了券，可以兑换八只，她有两张，也吃不完，遂要来一张。万万没想到，我几年最后还是吃上了大闸蟹。进入正题，朋友公司发的是礼品卡，兑换券，有一个卡号，和一个密码，到指定的网站上用这卡号和密码登录之后即可兑换，用快递发货。流程就是如此。拍照发我之后，卡号只有5位，密码是6位，我顿感兴奋，这可能性不多啊，密码只有6位，0">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yaoboss.me/images/由一只大闸蟹想到的基于tesseract-ocr的验证码识别/1.bmp">
+<meta property="og:image" content="http://yaoboss.me/images/由一只大闸蟹想到的基于tesseract-ocr的验证码识别/2.bmp">
+<meta property="og:updated_time" content="2018-07-22T03:57:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="由一只大闸蟹想到的基于tesseract-ocr的验证码识别">
+<meta name="twitter:description" content="本来今年没打算吃大闸蟹，也就没买，说实话也不是特别好这口，剥起来还麻烦。碰巧朋友公司发了券，可以兑换八只，她有两张，也吃不完，遂要来一张。万万没想到，我几年最后还是吃上了大闸蟹。进入正题，朋友公司发的是礼品卡，兑换券，有一个卡号，和一个密码，到指定的网站上用这卡号和密码登录之后即可兑换，用快递发货。流程就是如此。拍照发我之后，卡号只有5位，密码是6位，我顿感兴奋，这可能性不多啊，密码只有6位，0">
+<meta name="twitter:image" content="http://yaoboss.me/images/由一只大闸蟹想到的基于tesseract-ocr的验证码识别/1.bmp">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yaoboss.me/java/thinkings-from-crab/"/>
+
+  <title> 由一只大闸蟹想到的基于tesseract-ocr的验证码识别 | 姚老板的黑店 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?99a2d3229b0319d85883b13ed0467ba4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+    <div class="bottomband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">姚老板的黑店</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">记录一路走来的技术路上的总总</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                由一只大闸蟹想到的基于tesseract-ocr的验证码识别
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-01T15:49:42+08:00" content="2016-10-01">
+              2016-10-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/java/thinkings-from-crab/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="java/thinkings-from-crab/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本来今年没打算吃大闸蟹，也就没买，说实话也不是特别好这口，剥起来还麻烦。碰巧朋友公司发了券，可以兑换八只，她有两张，也吃不完，遂要来一张。万万没想到，我几年最后还是吃上了大闸蟹。进入正题，朋友公司发的是礼品卡，兑换券，有一个卡号，和一个密码，到指定的网站上用这卡号和密码登录之后即可兑换，用快递发货。流程就是如此。拍照发我之后，卡号只有5位，密码是6位，我顿感兴奋，这可能性不多啊，密码只有6位，0-9的数字组合，总共10的6次方，也就是100万种可能性，直接写程序去请求的话，理论上完全可以破解，那就免费吃螃蟹啦！当然，我只是出于技术的兴奋点，利用漏洞去吃螃蟹，不合法，也不道德。（让我想起阿里月饼）由此，因为一只螃蟹，开始两天的技术之旅。</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>目标兑换网站是使用ASP的站点，在查看源码的过程中，发现应该是那种外包公司，或者是淘宝建站，源码里面还有广告，<code>xx建站</code>，说明这个公司完全没有自己的技术运维人员。</p>
+<p>从代码层面，就是简单的ASP页面。核心就是一个登入窗口，可以输入卡号，密码登录。然后有一个验证码，验证码为0-9的4个数字组成，关键就是这个验证码了。登录请求可以代码直接模拟，对某一个卡号重试100万次，应该不用100万次那么多，密码的构成应该不是完全随机，不过也都是一个重试的过程。只要目标站不挂掉 - -。后来测试虽然没挂，不过也是拒绝服务了，这是后话了。</p>
+<p>再看验证码，chrome <code>f12</code> 直接抓请求，发现这个验证码的生成居然是一个<code>asp</code>页面，因为没写过asp，所以还是第一次见这种做法。查看了下，服务端是根据一个生成算法，生成一个<code>bmp</code>位图数据，放在asp页面中返回。请求头直接就是<code>image/webp,image/*,*/*;q=0.8</code>，显示最后就是一张bmp图片。</p>
+<p><img src="/images/由一只大闸蟹想到的基于tesseract-ocr的验证码识别/1.bmp" alt="验证码"></p>
+<p>验证码中加入了一些噪点，而且每个数字的形状还有区别，像上面图中，两个8就不太一样，这让后面的识别也是难度大了很多。</p>
+<h1 id="验证码识别"><a href="#验证码识别" class="headerlink" title="验证码识别"></a>验证码识别</h1><p>一开始我想的比较简单，觉得肯定会有开源的库开源简单搞定这个问题，后面开始去写代码的时候，发现确实不是那么容易。</p>
+<h2 id="获取验证码样本库"><a href="#获取验证码样本库" class="headerlink" title="获取验证码样本库"></a>获取验证码样本库</h2><p>做识别，肯定要先拿一些验证码样本库，不管是分析规律，还是测试识别成功率，肯定都是需要的。</p>
+<p>这个站点的验证码虽然是一个asp页面，但分析下不难得出，其实也就是把<code>bmp</code>的二进制数据写在了<code>asp</code>页面中，最后以bmp格式显示。这和你在电脑上把一个asp的文件改成bmp格式，然后查看，其实是一回事。</p>
+<p>这样就比较简单了，直接get请求拿到这个验证码，写到本地的bmp格式文件中，齐活！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">    public void spiderAllCodeImage() &#123;</span><br><span class="line">        for (int i=0; i&lt;10000; i++) &#123;</span><br><span class="line">            CloseableHttpClient client = HttpClients.createDefault();</span><br><span class="line"></span><br><span class="line">            //构造HTTP请求，使用java的httpclients</span><br><span class="line">            HttpGet request = new HttpGet(DZX_URL_CODE);</span><br><span class="line">//            request.setHeader(&quot;Accept&quot;, &quot;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&quot;);</span><br><span class="line">            CloseableHttpResponse response = null;</span><br><span class="line">            try &#123;</span><br><span class="line">                response = client.execute(request);</span><br><span class="line">            &#125; catch (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            byte[] imageByte = new byte[1024];</span><br><span class="line">            ByteArrayOutputStream baos = new ByteArrayOutputStream();</span><br><span class="line">            //从response中获取二进制数据</span><br><span class="line">            response.getEntity().writeTo(baos);</span><br><span class="line">            imageByte = baos.toByteArray();</span><br><span class="line">            //这段可以无视，本想做个缓存比较，后来发现不是很好用，动态代码生成的验证码都是不同的，只有在大量样本下，会出现重复</span><br><span class="line">            String md5 = DigestUtils.md5DigestAsHex(imageByte);</span><br><span class="line">            if (codeMd5Map.containsKey(md5)) &#123;</span><br><span class="line">                System.out.println(new String(imageByte, &quot;utf-8&quot;));</span><br><span class="line">                try &#123;</span><br><span class="line">                    Thread.sleep(1000);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                continue;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                codeMd5Map.put(md5, new String(imageByte, &quot;utf-8&quot;));</span><br><span class="line">            &#125;</span><br><span class="line">            //写到本地</span><br><span class="line">            File file = new File(&quot;D:/codeimage/code&quot; + i + &quot;.bmp&quot;);</span><br><span class="line">            FileOutputStream fos = new FileOutputStream(file);</span><br><span class="line">            fos.write(imageByte);</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>我上面获取了10000张，不过中间目标服务器会出现<code>unable service</code>拒绝服务现象，获取不到那么多样本，不过也已经够用了</p>
+<h2 id="识别引擎"><a href="#识别引擎" class="headerlink" title="识别引擎"></a>识别引擎</h2><p>对于验证码的识别，我可以说是完全从0开始。一切都从<code>google</code>开始。这也是技术人员最重要的东西了，就是能学，能快速上手。东西是永远学不完的，技术也是在不断更替的，不可能学完所有的技术，但是等到用的时候，只要知道学习的方法，自己花点时间研究上手就行了。</p>
+<p>重在内功心法，招式啥的，会点一招鲜走遍天的就好。</p>
+<p>说多了。</p>
+<p>先搜，如何识别验证码，看了几篇文章，都提到了一个开源项目，<code>Tesseract-OCR</code>，有了方向，就容易一些了。直接开始去搜这个开源项目，看看怎么使用。我也就选择这个主流的识别引擎了。毕竟讨论的人多，生态就会比较丰富，问题也比较容易得到解决。</p>
+<p>Tesseract-OCR，简单介绍下， <code>Tesseract是一个开源的OCR（Optical Character Recognition，光学字符识别）引擎，可以识别多种格式的图像文件并将其转换成文本，目前已支持60多种语言（包括中文）。 Tesseract最初由HP公司开发，后来由Google维护。</code>。</p>
+<p>github地址：</p>
+<blockquote>
+<p><a href="https://github.com/tesseract-ocr/tesseract" target="_blank" rel="noopener">https://github.com/tesseract-ocr/tesseract</a></p>
+</blockquote>
+<h2 id="引擎安装"><a href="#引擎安装" class="headerlink" title="引擎安装"></a>引擎安装</h2><h3 id="windows安装版"><a href="#windows安装版" class="headerlink" title="windows安装版"></a>windows安装版</h3><p>我使用的是windows，我在这只讲windows的，其他方式自己搜索下，不再赘述</p>
+<p>tesseract这个识别引擎，在windows下如果想直接使用的话，可以选择安装版，也就是<code>installer</code>的方式，像我们平常使用的软件一样</p>
+<p>寻找下载链接的过程比较曲折，因为有墙，好多地址都下不下来，我自己又有官网洁癖，喜欢一定要在官网下的东西，反正最终曲折的下载好</p>
+<p>tesseract更新速度较慢，如果你追求速度，直接使用我下面给的下载链接，最快。</p>
+<blockquote>
+<p><a href="http://download.csdn.net/detail/yzw19932010/9644501" target="_blank" rel="noopener">http://download.csdn.net/detail/yzw19932010/9644501</a></p>
+</blockquote>
+<p>安装好以后，找到安装目录下的<code>tesseract.exe</code>，在<strong>当前目录下</strong>cmd命令模式下执行，</p>
+<p><code>tesseract.exe doc\eurotext.tif doc\result</code></p>
+<p>这条命令，使用识别引擎，识别<code>doc\eurotext.tif</code>这个文件，结果写到<code>doc\result</code></p>
+<p>或者</p>
+<p><code>tesseract.exe doc\eurotext.tif doc\result digits</code></p>
+<p>加上<code>digits</code>参数，表示只识别数字</p>
+<p>还可以指定识别模式，<code>-psm</code>是识别模式，<code>-l</code>指定识别语言<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pagesegmode values are:</span><br><span class="line">0 = Orientation and script detection (OSD) only.</span><br><span class="line">1 = Automatic page segmentation with OSD.</span><br><span class="line">2 = Automatic page segmentation, but no OSD, or OCR</span><br><span class="line">3 = Fully automatic page segmentation, but no OSD. (Default)</span><br><span class="line">4 = Assume a single column of text of variable sizes.</span><br><span class="line">5 = Assume a single uniform block of vertically aligned text.</span><br><span class="line">6 = Assume a single uniform block of text.</span><br><span class="line">7 = Treat the image as a single text line.</span><br><span class="line">8 = Treat the image as a single word.</span><br><span class="line">9 = Treat the image as a single word in a circle.</span><br><span class="line">10 = Treat the image as a single character.</span><br><span class="line">-l lang and/or -psm pagesegmode must occur before anyconfigfile.</span><br></pre></td></tr></table></figure></p>
+<p><code>D:\Tesseract\Tesseract-OCR&gt;tesseract.exe doc\newimage.bmp doc\result -l eng -psm 7</code></p>
+<h3 id="代码支持"><a href="#代码支持" class="headerlink" title="代码支持"></a>代码支持</h3><p>上面这种模式当然还不够好，只有命令行，虽然说代码中也能调用，但是不够优雅。</p>
+<p>tesseract 原生好像只提供3个DLL给C或者C++调用，其他语言没有提供API支持</p>
+<p>不过，tesseract有很多<code>wrapper</code>，就是前人给我们包装好的，给各种语言使用的一个适配包</p>
+<p>原文地址：</p>
+<blockquote>
+<p><a href="https://github.com/tesseract-ocr/tesseract/wiki/AddOns#tesseract-wrappers" target="_blank" rel="noopener">https://github.com/tesseract-ocr/tesseract/wiki/AddOns#tesseract-wrappers</a></p>
+</blockquote>
+<p>可以到这里找你想使用的语言的<code>wrapper</code></p>
+<p>我使用的是java，我这里就说java的了</p>
+<p>最方便的是直接使用<code>maven</code>获取<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;net.sourceforge.tess4j&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;tess4j&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.2.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<p>不过这种方式，不包含需要使用到的<code>testdata</code>（引擎自带的一些识别需要的训练数据），运行会报错</p>
+<p>所以前面那个windows版本还是要下的，里面包含了所有的<code>testdata</code></p>
+<p>推荐方式：直接到 tesseract 把其源码拉下来，在test包下面有很多例子，都是可以直接运行的，这样方式最快，最方便，testdata也有，直接引用这个源码也都可以</p>
+<h1 id="图片处理"><a href="#图片处理" class="headerlink" title="图片处理"></a>图片处理</h1><p>引擎有了，API调用很简单，核心代码就两句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testDoOCR_File() throws Exception &#123;</span><br><span class="line">    logger.info(&quot;doOCR on a PNG image&quot;);</span><br><span class="line">    //获取待识别图片的File对象</span><br><span class="line">    File imageFile = new File(this.testResourcesDataPath, &quot;eurotext.png&quot;);</span><br><span class="line">    String expResult = &quot;The (quick) [brown] &#123;fox&#125; jumps!\nOver the $43,456.78 &lt;lazy&gt; #90 dog&quot;;</span><br><span class="line">    //获取Tesseract实例</span><br><span class="line">    ITesseract instance = instance = new Tesseract();</span><br><span class="line">    //设置testdata数据路径</span><br><span class="line">    instance.setDatapath(new File(datapath).getPath());</span><br><span class="line">    //识别，返回String的结果</span><br><span class="line">    String result = instance.doOCR(imageFile);</span><br><span class="line">    logger.info(result);</span><br><span class="line">    assertEquals(expResult, result.substring(0, expResult.length()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是对于我们上面的验证码，发现识别根本不正确，没法得到正确的结果</p>
+<blockquote>
+<p>特别是，代码识别，和cmd命令识别，结果还不一样，暂时没找到问题所在</p>
+</blockquote>
+<p>这时候，就需要图片处理了</p>
+<p>原图里面加入了太多的噪点，而且数字进行了扭曲，导致识别率极低，几乎是不可用</p>
+<p>网上很多方案采取的大都是，先切割，把每一个数字单独切割出来，然后去噪，进行二值化，灰度处理（因为处理引擎对于灰度图片识别较好）</p>
+<p>但是我要处理的这个验证码，每一个数字都不是完全的相同，有扭曲程度，如果进行切割，最后拿二进制数据进行比较，这个相似度的阈值很难确定，所以我还是倾向于识别引擎可以去帮我处理这些问题（不过，最后发现，我还是想太多，识别引擎没有这么智能，做不到这点）</p>
+<h2 id="去除噪点-二值化处理-灰度处理"><a href="#去除噪点-二值化处理-灰度处理" class="headerlink" title="去除噪点+二值化处理+灰度处理"></a>去除噪点+二值化处理+灰度处理</h2><p>对于这个图片的二值化处理比较简单</p>
+<p>我用<code>FastStone Capture</code>的取色工具看了下图片里的色值，发现去除噪点之后的图片都是一种颜色</p>
+<p>那就只要简单遍历图片的像素点，把主干的颜色全部设置成黑色就行了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">package sample.simple.service;</span><br><span class="line"></span><br><span class="line">import org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line">import javax.imageio.ImageIO;</span><br><span class="line">import java.awt.*;</span><br><span class="line">import java.awt.image.BufferedImage;</span><br><span class="line">import java.io.File;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by ji on 2016/10/1.</span><br><span class="line"> */</span><br><span class="line">@Service</span><br><span class="line">public class BmpService &#123;</span><br><span class="line"></span><br><span class="line">    public void optimisedBmp(String bmpAbsolutePath) throws Exception &#123;</span><br><span class="line">        File file = new File(bmpAbsolutePath);</span><br><span class="line">        BufferedImage bufferedImage = ImageIO.read(file);</span><br><span class="line">        BufferedImage newImage = removeInterference(bufferedImage);</span><br><span class="line">        File newImageFile = new File(&quot;D:\\codeimage\\newImage\\newimage.bmp&quot;);</span><br><span class="line">        ImageIO.write(newImage, &quot;bmp&quot;, newImageFile);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 去除图像噪点</span><br><span class="line">    public static BufferedImage removeInterference(BufferedImage image)</span><br><span class="line">            throws Exception &#123;</span><br><span class="line">        int width = image.getWidth();</span><br><span class="line">        int height = image.getHeight();</span><br><span class="line">        for (int x = 0; x &lt; width; ++x) &#123;</span><br><span class="line">            for (int y = 0; y &lt; height; ++y) &#123;</span><br><span class="line">                if (!isFontColor(image.getRGB(x, y))) &#123;</span><br><span class="line">                    image.setRGB(x, y, Color.WHITE.getRGB());</span><br><span class="line">                &#125;else &#123;</span><br><span class="line">                    image.setRGB(x, y, Color.BLACK.getRGB());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return image;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 使用工具找到主色的色值，得到R + G +B =340</span><br><span class="line">    private static boolean isFontColor(int colorInt) &#123;</span><br><span class="line">        Color color = new Color(colorInt);</span><br><span class="line"></span><br><span class="line">        return color.getRed() + color.getGreen() + color.getBlue() == 340;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码写的比较乱，不过大概意思能看出来，就是去除噪点，加二值化</p>
+<p>这样处理完的图片像这样：</p>
+<p><img src="/images/由一只大闸蟹想到的基于tesseract-ocr的验证码识别/2.bmp" alt="验证码"></p>
+<p>再使用识别引擎试下，正确率提高了一些，但是，还没法做到完全正确。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>对于图像识别，真的是一门大学问，我一开始想的过于简单了。后面发现坑确实还是多，而且对于<code>计算机图像</code>技术要求较高，虽然有开源引擎，但是调教还是要求程序员有深厚的内功，对于我这种刚入门的菜鸟，最后的结局就是失败了，大闸蟹最后也没吃上了。哈哈~</p>
+<p>接下来还可以做的工作，包括 腐蚀， 滤波，主要还是对图片的处理</p>
+<p>不过，我感觉也可以有其他思路，不过实现起来比较复杂，涉及到很多机器学习的东西</p>
+<p>比如，可以切割拿到0-9个数字的一个二进制值，用来做原始数据，后面的待验证的都和原始数据进行比较，相似度最大的就认为是那个数字</p>
+<p>但是这个相似度的计算，有待考虑</p>
+<p>因为时间有限，只能暂时搁置</p>
+<p>也希望有大神可以不吝赐教，这种验证码的识别应该怎么做，最佳实践是什么</p>
+<p>ps. 国庆第一天总算没浪费，干了一些事，学了点东西 ╰(￣▽￣)╭</p>
+<hr>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p>参考过的一些文章，真心感谢前人的付出，技术人真的无私：</p>
+<p>提供了一种Tesseract-ocr样本训练方法，提供一种比较好的思路，后面我也会做尝试</p>
+<blockquote>
+<p><a href="http://blog.csdn.net/firehood_/article/details/8433077" target="_blank" rel="noopener">http://blog.csdn.net/firehood_/article/details/8433077</a></p>
+</blockquote>
+<p>写了一个基于Tesseract-ocr做电表度数的识别项目的思考过程，很有参考价值</p>
+<blockquote>
+<p><a href="https://taozj.org/2016/07/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8ETesseract%E7%9A%84%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB%E7%A8%8B%E5%BA%8F/?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">https://taozj.org/2016/07/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8ETesseract%E7%9A%84%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB%E7%A8%8B%E5%BA%8F/?utm_source=tuicool&amp;utm_medium=referral</a></p>
+</blockquote>
+<p>Java 使用 Tess4J 进行 图片文字识别 笔记（API使用指导，如果使用JAVA的话，要看下）</p>
+<blockquote>
+<p><a href="https://my.oschina.net/zhouxiang/blog/161619" target="_blank" rel="noopener">https://my.oschina.net/zhouxiang/blog/161619</a></p>
+</blockquote>
+<blockquote>
+<p><a href="http://www.zhangrenhua.com/2016/05/26/Tesseract-OCR%E5%9B%BE%E7%89%87%E8%AF%86%E5%88%AB/" target="_blank" rel="noopener">http://www.zhangrenhua.com/2016/05/26/Tesseract-OCR%E5%9B%BE%E7%89%87%E8%AF%86%E5%88%AB/</a></p>
+</blockquote>
+<p>没有使用tesseract的一种思路，其实就是基于相似度的,还包括切割</p>
+<blockquote>
+<p><a href="http://www.cnblogs.com/nayitian/p/3282862.html" target="_blank" rel="noopener">http://www.cnblogs.com/nayitian/p/3282862.html</a></p>
+</blockquote>
+<p>tesseract-ocr 文档页面</p>
+<blockquote>
+<p><a href="https://github.com/tesseract-ocr" target="_blank" rel="noopener">https://github.com/tesseract-ocr</a> 文档页面/tesseract/wiki/AddOns#tesseract-wrappers</p>
+</blockquote>
+<p>tesseract4java</p>
+<blockquote>
+<p><a href="https://github.com/tesseract4java/tesseract4java" target="_blank" rel="noopener">https://github.com/tesseract4java/tesseract4java</a></p>
+</blockquote>
+<p>EasyPR</p>
+<blockquote>
+<p><a href="https://github.com/liuruoze/EasyPR" target="_blank" rel="noopener">https://github.com/liuruoze/EasyPR</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag">#java</a>
+          
+            <a href="/tags/tesseract/" rel="tag">#tesseract</a>
+          
+            <a href="/tags/机器学习/" rel="tag">#机器学习</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/java/what-is-the-difference-between-unicode-utf-8-gbk-gb2312/" rel="next" title="十分钟理解字符编码：ASCII,Unicode,UTF-8,GBK,GB2312">
+                <i class="fa fa-chevron-left"></i> 十分钟理解字符编码：ASCII,Unicode,UTF-8,GBK,GB2312
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/web技术/what-is-jsonp/" rel="prev" title="什么是JSONP？关于前端的跨域问题">
+                什么是JSONP？关于前端的跨域问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="java/thinkings-from-crab/"
+           data-title="由一只大闸蟹想到的基于tesseract-ocr的验证码识别" data-url="http://yaoboss.me/java/thinkings-from-crab/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/dogeAndFish.jpg"
+               alt="Yao" />
+          <p class="site-author-name" itemprop="name">Yao</p>
+          <p class="site-description motion-element" itemprop="description">关注jvm,java,go,as3,node,web全栈,高可用 高并发架构,直播行业</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/hero82748274" target="_blank" rel="external nofollow" title="夏天的树人的专栏">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  夏天的树人的专栏
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.chenside.cn" target="_blank" rel="external nofollow" title="思德的博客">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  思德的博客
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-number">1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#验证码识别"><span class="nav-number">2.</span> <span class="nav-text">验证码识别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#获取验证码样本库"><span class="nav-number">2.1.</span> <span class="nav-text">获取验证码样本库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#识别引擎"><span class="nav-number">2.2.</span> <span class="nav-text">识别引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引擎安装"><span class="nav-number">2.3.</span> <span class="nav-text">引擎安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#windows安装版"><span class="nav-number">2.3.1.</span> <span class="nav-text">windows安装版</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码支持"><span class="nav-number">2.3.2.</span> <span class="nav-text">代码支持</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图片处理"><span class="nav-number">3.</span> <span class="nav-text">图片处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#去除噪点-二值化处理-灰度处理"><span class="nav-number">3.1.</span> <span class="nav-text">去除噪点+二值化处理+灰度处理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文档"><span class="nav-number">5.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yao</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io" rel="external nofollow">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"yaoboss"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>
